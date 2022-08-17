@@ -31,7 +31,7 @@ const StatusIndicator = () => {
 
     const stackVariants: Variants = {
         hover: {
-            width: "fit-content",
+            width: 200,
             shadow: 'lg',
         },
         initial: {
@@ -58,6 +58,7 @@ const StatusIndicator = () => {
     }
 
     return (
+        //@ts-expect-error
         <MotionHStack
             position="absolute"
             bottom={0}
