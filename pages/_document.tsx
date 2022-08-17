@@ -5,14 +5,24 @@ import theme from '../lib/theme'
 export default class Document extends NextDocument {
     render() {
         return (
-            <Html lang="en">
+            <Html lang="en" style={{
+                height: "100%",
+                padding: 0,
+                margin: 0,
+                boxSizing: "border-box"
+            }}>
                 <Head />
-                <body>
+                <body style={{
+                    height: "100%",
+                    padding: 0,
+                    margin: 0,
+                    boxSizing: "border-box"
+                }}>
                     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
                     <Main />
                     <NextScript />
                 </body>
-            </Html>
+            </Html >
         )
     }
 }

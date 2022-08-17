@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
-
+import HeroImage from '../components/hero-image';
 const Home: NextPage = () => {
-  return <div> Hello World</div>;
+  return <HeroImage></HeroImage>;
 }
 
 export default Home

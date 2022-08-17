@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import NavBar from '../navbar'
-import { Box, ColorMode, Container, useColorMode } from '@chakra-ui/react'
+import { Box, chakra, ColorMode, Container, useColorMode } from '@chakra-ui/react'
 import Footer from '../footer'
 import { Router } from 'next/router'
 import { PostCardStyle } from '../post-card'
@@ -37,6 +37,7 @@ const variants: Variants = {
 }
 
 const Main = ({ children, router }: ILayoutProps) => {
+    const ChakraFooter = chakra(Footer);
     //@expect-ts-error
     return (
         <Box as={motion.main}
@@ -45,6 +46,10 @@ const Main = ({ children, router }: ILayoutProps) => {
             initial="hidden"
             animate="enter"
             exit="exit"
+            display="flex"
+            flexDirection="column"
+            minHeight="100vh"
+            boxSizing='border-box'
         >
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,12 +61,12 @@ const Main = ({ children, router }: ILayoutProps) => {
                 <title>Liyan&apos;s blog - Homepage</title>
             </Head>
             <NavBar path={router.asPath} />
-            <Container maxW="container.md" pt={14} >
+            <Container maxW="container.md" pt={14} flexGrow={1} >
                 <Box>
                     {children}
                 </Box>
-                <Footer />
             </Container>
+            <ChakraFooter flexGrow={0} flexShrink={0} />
             <PostCardStyle />
         </Box>
     )

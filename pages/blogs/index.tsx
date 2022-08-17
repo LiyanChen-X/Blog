@@ -19,6 +19,9 @@ type Props = {
     pages: NotionPostPage[]
 }
 
+const MotionFlex = motion<FlexProps>(Flex);
+const MotionBox = motion<BoxProps>(Box)
+
 
 const Posts: NextPage<Props> = ({ pages }: Props) => {
 
@@ -84,8 +87,6 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         return displayPosts.slice(start, end);
     }, [currentPage, displayPosts]);
 
-    const MotionFlex = motion<FlexProps>(Flex);
-    const MotionBox = motion<BoxProps>(Box)
 
     // TODO: replace with algolia search;
     return (
