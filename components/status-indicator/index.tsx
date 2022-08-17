@@ -94,7 +94,7 @@ const StatusIndicator = () => {
                     },
                 }}
             >
-                {"some message here"}
+                {"Love eating!"}
             </MotionText>
         </MotionHStack>
 

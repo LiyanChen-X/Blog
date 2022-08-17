@@ -61,7 +61,7 @@ const Main = ({ children, router }: ILayoutProps) => {
                 <title>Liyan&apos;s blog - Homepage</title>
             </Head>
             <NavBar path={router.asPath} />
-            <Container maxW="container.md" pt={14} flexGrow={1} >
+            <Container maxW="container.lg" pt={14} flexGrow={1} >
                 <Box>
                     {children}
                 </Box>
