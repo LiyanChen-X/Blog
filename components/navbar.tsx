@@ -1,5 +1,6 @@
 import Logo from "./logo";
 import NextLink from "next/link";
+import { useContext, useEffect, useState } from 'react';
 import {
     Container,
     Box,
@@ -12,10 +13,14 @@ import {
     MenuList,
     MenuButton,
     IconButton,
-    useColorModeValue
+    useColorModeValue,
+    Tooltip
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import ThemeToggleButton from "./ThemeToggleButton";
+import { CmdPaletteContext } from "../providers/cmd-palette-provider";
+import { FiCommand } from 'react-icons/fi';
+
 
 export interface ILinkItemProps {
     href: string,
@@ -47,7 +52,17 @@ const NavBar = (props: {
     path: string,
     [x: string]: any
 }) => {
-    const { path } = props
+    const { path } = props;
+    const { open: openCommandPalette } = useContext(CmdPaletteContext);
+    const [shortcut, setShortcut] = useState<string>();
+
+    useEffect(() => {
+        setShortcut(
+            navigator.userAgent.indexOf('Mac OS X') != -1 ? 'Cmd + K' : 'Ctrl + K'
+        );
+    }, [setShortcut]);
+
+
     return (
         <Box
             position="fixed"
@@ -55,8 +70,11 @@ const NavBar = (props: {
             w="100%"
             bg={useColorModeValue('#ffffff40', '#20202380')}
             css={{ backdropFilter: 'blur(10px)' }}
-            zIndex={2}
+            zIndex="popover"
             {...props}
+            insetX={0}
+            transitionDuration="normal"
+            transitionProperty="background"
         >
             <Container
                 display="flex"
@@ -72,7 +90,20 @@ const NavBar = (props: {
                     </Heading>
                 </Flex>
 
-                <Stack
+                <Flex flex={1} justifyContent="right">
+                    <ThemeToggleButton />
+                    <Tooltip label={`Command Palette (${shortcut})`}>
+                        <IconButton
+                            aria-label="toggle theme"
+                            icon={<FiCommand />}
+                            onClick={openCommandPalette}
+                            size="sm"
+                            variant="ghost"
+                        />
+                    </Tooltip>
+                </Flex>
+
+                {/* <Stack
                     direction={{ base: 'column', md: 'row' }}
                     display={{ base: 'none', md: 'flex' }}
                     width={{ base: 'full', md: 'auto' }}
@@ -89,12 +120,9 @@ const NavBar = (props: {
                     <LinkItem href="/resume" path={path}>
                         Resume
                     </LinkItem>
-                </Stack>
+                </Stack> */}
 
-                <Flex flex={1} justifyContent="right">
-                    <ThemeToggleButton />
-
-                    <Box ml={2} display={{ base: 'inline-block', md: 'none' }}>
+                {/* <Box ml={2} display={{ base: 'inline-block', md: 'none' }}>
                         <Menu isLazy id="navbar-menu">
                             <MenuButton
                                 as={IconButton}
@@ -117,8 +145,7 @@ const NavBar = (props: {
                                 </NextLink>
                             </MenuList>
                         </Menu>
-                    </Box>
-                </Flex>
+                    </Box> */}
             </Container>
         </Box >
     )

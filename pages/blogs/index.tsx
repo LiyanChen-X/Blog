@@ -5,15 +5,15 @@ import dayjs from "dayjs"
 import { FcApproval, FcDocument, FcEditImage, FcEngineering } from "react-icons/fc";
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { HiOutlineSearch } from "react-icons/hi";
-import Section from '../../components/section'
 import { FaRegSadTear } from "react-icons/fa";
 import PostCard, { IPostCardProps } from "../../components/post-card"
-import { Box, Heading, HStack, Icon, Input, InputGroup, InputLeftElement, List, ListIcon, ListItem, SimpleGrid, Stack, Tag, TagLabel, TagLeftIcon, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Button, Flex, FlexProps, Heading, HStack, Icon, Input, InputGroup, InputLeftElement, List, ListIcon, ListItem, SimpleGrid, Stack, StackProps, Tag, TagLabel, TagLeftIcon, Text, VStack } from '@chakra-ui/react'
 import { getDatabase, NotionPostPage, PostProperties } from '../../lib/notion'
 import { ChangeEventHandler, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 import { transformNotionPage } from '../../lib/transform-notion-page';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 
 type Props = {
     pages: NotionPostPage[]
@@ -43,20 +43,20 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
     const startDate = dayjs().subtract(1, "year").format("YYYY-MM-DD");
     const endDate = dayjs().format("YYYY-MM-DD");
     const posts = pages.map((page) => transformNotionPage(page));
-    const tagEnableStatus = useMemo(() => {
-        const enableStatus = new Map<string, boolean>();
+    const tags = useMemo(() => {
+        const enableStatus = new Set<string>();
         for (const post of posts) {
             for (const tag of post.pageTags) {
-                enableStatus.set(tag, true);
+                enableStatus.add(tag);
             }
         }
-        // enableStatus.set("all", true);
         return enableStatus
     }, [posts]);
 
-    const [enabledTags, setEnabledTags] = useState(tagEnableStatus);
+    const [selectedTag, setSelectedTag] = useState<string>();
     const [searchStr, setSearchStr] = useState("");
     const [displayPosts, setDisplayPosts] = useState(posts);
+
     const onSearch: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
         const query = event.currentTarget.value;
         setSearchStr(query);
@@ -66,18 +66,13 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         setDisplayPosts(filteredPosts);
     }, [posts]);
 
-    const onTagClick = (tag: string) => {
-        const newEnabledTags = new Map(enabledTags);
-        newEnabledTags.set(tag, !enabledTags.get(tag));
-        setEnabledTags(newEnabledTags);
-        const newDisplayPosts = posts.filter((post) => {
-            return post.pageTags.some((pageTag) => {
-                return newEnabledTags.get(pageTag) ?? false;
-            }
-            );
+    const onTagClick = (tag?: string) => {
+        if (tag) {
+            setDisplayPosts(posts.filter(post => post.pageTags.includes(tag)));
+        } else {
+            setDisplayPosts(posts);
         }
-        );
-        setDisplayPosts(newDisplayPosts);
+        setSelectedTag(tag);
     }
 
     const pageSize = 10;
@@ -89,11 +84,13 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         return displayPosts.slice(start, end);
     }, [currentPage, displayPosts]);
 
+    const MotionFlex = motion<FlexProps>(Flex);
+    const MotionBox = motion<BoxProps>(Box)
 
     // TODO: replace with algolia search;
     return (
-        <Stack marginBottom={4}>
-            <section>
+        <Box marginBottom={4}>
+            <Box mb={2}>
                 <Text mb={2}>
                     Total {pages.length} pages:
                 </Text>
@@ -108,73 +105,96 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
                         <ListIcon as={FcApproval} /> {posts.filter((_) => _.pageStatus === "Published").length} in Published State
                     </ListItem>
                 </List>
-            </section>
+            </Box>
 
-            <Section >
+            <Box >
                 <CalendarHeatmap
                     startDate={new Date(startDate)}
                     endDate={new Date(endDate)}
                     values={contributions}
                 />
-            </Section>
-            <Section>
+            </Box>
+
+            <Box>
                 <InputGroup my={2}>
                     <InputLeftElement pointerEvents="none">
                         <Icon as={HiOutlineSearch} color="gray.400"></Icon>
                     </InputLeftElement>
                     <Input placeholder="Search blog Posts" variant="filled" value={searchStr} onChange={onSearch} />
                 </InputGroup>
-            </Section>
-            <Section>
-                <HStack>
-                    {
-                        Array.from(enabledTags.keys()).map((tag) =>
-                            <TagButton
-                                key={tag}
-                                selected={enabledTags.get(tag) ?? false}
-                                label={tag}
-                                onClick={onTagClick} />
-                        )
-                    }
-                </HStack>
-            </Section>
-            <Section delay={0.6} >
-                {!displayPosts.length &&
-                    <VStack align={"center"} mt="6">
-                        <Icon as={FaRegSadTear} w="100px" h="100px" color="gray.400"></Icon>
-                        <Text> No post yet.</Text>
-                    </VStack>
+            </Box>
 
-                }
+
+            <HStack my={2}>
+                <Button
+                    textTransform="uppercase"
+                    colorScheme="purple"
+                    onClick={() => onTagClick()}
+                    size="xs"
+                    variant={!selectedTag ? "solid" : "ghost"}
+                >
+                    All
+                </Button>
                 {
-                    // TODO: enable animation for status change
-                    <VStack spacing={4} >
-                        <SimpleGrid
-                            columns={2}
-                            spacing={10}>
-
-                            {
-                                renderedItems.map((post) => {
-                                    return (
-                                        <Box
-                                            key={post.id}
-                                        >
-                                            <PostCard
-                                                {...post}
-                                            />
-                                        </Box>
-
-                                    )
-
-                                })
-                            }
-                        </SimpleGrid>
-                        {/* TODO: add night mode style */}
-                        <Pagination total={displayPosts.length} onChange={(pageNumber) => setCurrentPage(pageNumber)} />
-                    </VStack>
+                    Array.from(tags).map((tag) => (
+                        <Button
+                            key={tag}
+                            textTransform="uppercase"
+                            colorScheme="purple"
+                            onClick={() => onTagClick(tag)}
+                            size="xs"
+                            variant={selectedTag === tag ? "solid" : "ghost"}
+                        >
+                            {tag}
+                        </Button>
+                    ))
                 }
-            </Section>
-        </Stack>
+            </HStack>
+
+            <VStack width="100%" alignItems="flex-start">
+                <AnimatePresence>
+                    {!displayPosts.length &&
+                        <MotionFlex key="No-Posts-Icon" align={"center"} mt="6" width="100%" direction="column"
+                            initial={{ opacity: 0, x: 0, y: 50 }}
+                            animate={{ opacity: 1, x: 0, y: 0 }}
+                            exit={{ opacity: 0 }}>
+                            <Icon as={FaRegSadTear} w="100px" h="100px" color="gray.400"></Icon>
+                            <Text> No post yet.</Text>
+                        </MotionFlex>
+                    }
+                    {
+                        <Box width="100%">
+                            <LayoutGroup>
+                                {
+                                    renderedItems.map((post) => {
+                                        return (
+                                            <MotionBox
+                                                my={3}
+                                                key={post.id}
+                                                layout
+                                                initial={{ opacity: 0, x: -10, y: 0 }}
+                                                animate={{ opacity: 1, x: 0, y: 0 }}
+                                                exit={{ opacity: 0 }}
+                                            >
+                                                <PostCard
+                                                    {...post}
+                                                />
+                                            </MotionBox>
+
+                                        )
+
+                                    })
+                                }
+                                <MotionFlex layout justifyContent="center" my={3}>
+                                    <Pagination total={displayPosts.length} current={currentPage} onChange={(pageNumber) => setCurrentPage(pageNumber)} />
+                                </MotionFlex>
+                            </LayoutGroup>
+                        </Box >
+                    }
+                </AnimatePresence>
+
+            </VStack >
+        </Box >
 
     )
 }

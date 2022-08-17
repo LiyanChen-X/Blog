@@ -1,10 +1,9 @@
-import { Badge, Heading, HStack, LinkBox, LinkOverlay, StackDivider, Text, VStack } from "@chakra-ui/react";
+import { Badge, Heading, HStack, LinkBox, LinkOverlay, StackDivider, Text, VStack, Icon, useBreakpointValue, Box, Flex, Button, Stack } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { Global } from "@emotion/react";
 import dayjs from "dayjs"
-
-
+import { FiArrowRight } from "react-icons/fi";
 export interface IPostCardProps {
     id: string,
     title: string,
@@ -18,15 +17,15 @@ export interface IPostCardProps {
 
 // TODO: how to handle thumnail empty case;
 export default function PostCard(props: IPostCardProps) {
-    const { title, desc, thumbnail, href, createdTime, pageTags, pageStatus } = props;
-    const loadingImage = `/images/image_loading.svg`;
+    const { desc, href, createdTime, pageTags } = props;
+    const hidePointer = useBreakpointValue({ base: true, md: false })
     return (
-        <LinkBox as="article" >
+        <LinkBox as="article" role="group" position="relative">
             <HStack
                 p={{ base: 0, md: 2 }}
                 _hover={{
                     bg: 'gray.100',
-                    transform: 'scale(1.05, 1.05)',
+                    transform: 'scale(1.02, 1.02)',
                 }}
                 _dark={{
                     _hover: {
@@ -37,16 +36,8 @@ export default function PostCard(props: IPostCardProps) {
                 transitionDuration="slow"
                 transitionTimingFunction="ease-out"
                 transitionProperty="all">
-                <Image
-                    src={thumbnail ?? loadingImage}
-                    alt={title}
-                    className="post-item-thumbnail"
-                    placeholder='blur'
-                    blurDataURL={loadingImage}
-                    width='100%'
-                    height='100%'
-                    loading="lazy" />
-                <VStack alignItems="streach"
+                <VStack
+                    alignItems="streach"
                     w="full"
                 >
                     <VStack alignItems={"flex-start"}>
@@ -77,7 +68,61 @@ export default function PostCard(props: IPostCardProps) {
                         {desc}
                     </Text>
                 </VStack>
+                {/* For published page */}
+                {
+                    <HStack
+                        justifyContent="flex-start"
+                        w={12}
+                        hidden={hidePointer}
+                    >
+                        <Icon
+                            as={FiArrowRight}
+                            boxSize={6}
+                            color="purple.500"
+                            opacity={0}
+                            _groupHover={{ ml: 6, opacity: 1 }}
+                            transitionDuration="slow"
+                            transitionProperty="all"
+                            transitionTimingFunction="ease-out"
+                        />
+                    </HStack>
+                }
+                {/* For locked page */}
+                {
+                    false &&
+                    <Flex position="absolute"
+                        zIndex="docked"
+                        rounded="md"
+                        alignItems="streach"
+                        inset={0}
+                        align="center"
+                        justify="center"
+                        bg="transparent"
+                        id="overlay"
+                        style={{
+                            margin: 0
+                        }}
+                        _groupHover={{
+                            bg: 'blackAlpha.500',
+                        }}
+                        transitionDuration="slow"
+                        transitionTimingFunction="ease-out"
+                    >
+                        <Flex direction={"row"} alignItems={"center"}>
+                            <Button size="sm" opacity={1}
+                                _groupHover={{ opacity: 1 }}
+                                transitionDuration="slow"
+                                transitionProperty="opacity"
+                                disabled
+                                transitionTimingFunction="ease-out">Still in draft status</Button>
+                        </Flex>
+
+                    </Flex>
+
+                }
+
             </HStack>
+
         </LinkBox>
     )
 }

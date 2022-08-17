@@ -16,6 +16,8 @@ const ThemeToggleButton = () => {
                 transition={{ duration: 0.2 }}
             >
                 <IconButton
+                    size="sm"
+                    variant="ghost"
                     aria-label="Toggle theme"
                     colorScheme={useColorModeValue('purple', 'orange')}
                     icon={useColorModeValue(<MoonIcon />, <SunIcon />)}
@@ -23,7 +25,7 @@ const ThemeToggleButton = () => {
                 >
                 </IconButton>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence >
     )
 }
 
