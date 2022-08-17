@@ -139,6 +139,7 @@ const CmdPalette = () => {
         <AnimatePresence exitBeforeEnter>
             {isOpened && (<Portal>
                 <MotionFlex
+                    key="modal"
                     onClick={close}
                     variants={backdropVariants}
                     initial="initial"
@@ -192,7 +193,7 @@ const CmdPalette = () => {
                                         {
                                             // @ts-expect-error
                                             commands[section].length > 0 && (
-                                                <ListItem key={section}>
+                                                <ListItem>
                                                     <Text
                                                         my={2}
                                                         color="gray.500"

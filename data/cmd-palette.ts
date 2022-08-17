@@ -53,7 +53,7 @@ export const searchItems: SearchItemsType = {
             title: 'Bookmarks',
             href: '/bookmarks',
         }, {
-            playground: "Playground",
+            title: "Playground",
             href: '/playground',
         }
     ],
@@ -64,4 +64,7 @@ export const searchItems: SearchItemsType = {
             icon: IoMoon,
         },
     ],
+    social: [
+
+    ]
 };

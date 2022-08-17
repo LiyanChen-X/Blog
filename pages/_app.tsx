@@ -19,13 +19,13 @@ function Website({ Component, pageProps, router }: AppProps) {
     <ChakraProvider theme={theme}>
       <Fonts />
       <CmdPaletteProvider>
-        <AnimatePresence exitBeforeEnter initial={true} onExitComplete={() => {
+        <AnimatePresence initial={true} onExitComplete={() => {
           if (typeof window !== "undefined") {
             window.scrollTo({ top: 0 })
           }
         }}>
-          <Layout router={router}>
-            <Component {...pageProps} key={router.route} />
+          <Layout router={router} key={router.route}>
+            <Component {...pageProps} />
           </Layout>
           <CmdPalette />
         </AnimatePresence>
