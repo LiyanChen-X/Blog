@@ -6,7 +6,7 @@ import {
     useBreakpointValue,
     useColorModeValue as mode,
 } from '@chakra-ui/react';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, LayoutGroup } from 'framer-motion';
 
 
 const MotionHStack = motion<StackProps>(HStack);
@@ -19,13 +19,11 @@ const StatusIndicator = () => {
 
     if (isMobile) {
         stackStyles = {
-            width: 10,
             shadow: 'lg',
             spacing: 3,
         };
     } else {
         stackStyles = {
-            width: 10,
             shadow: 'none',
             spacing: 0,
         };
@@ -33,18 +31,29 @@ const StatusIndicator = () => {
 
     const stackVariants: Variants = {
         hover: {
-            width: 'max-content',
-            maxWidth: 'unset',
+            width: "fit-content",
             shadow: 'lg',
+        },
+        initial: {
+            width: 40,
+            minWidth: 40
         }
     }
 
     const textVariants: Variants = {
+        initial: {
+            opacity: 0,
+            marginLeft: 0,
+            display: "none"
+        },
         hover: {
             opacity: 1,
-            width: 'max-content',
+            width: 'auto',
             marginLeft: 3,
             display: 'initial',
+            transition: {
+                duration: 0.5,
+            }
         }
     }
 
@@ -64,14 +73,18 @@ const StatusIndicator = () => {
             borderColor={mode('gray.300', 'gray.600')}
             variants={stackVariants}
             whileHover="hover"
-            role="group"
+            initial="initial"
             rounded="3xl"
             spacing={0}
             layout
             {...stackStyles}
         >
-            <MotionText>{"some emoji here"}</MotionText>
+            <MotionText>{"🍖"}</MotionText>
             <MotionText
+                maxW="full"
+                variants={textVariants}
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
                 sx={{
                     '@media(hover: none)': {
                         opacity: 1,
@@ -79,18 +92,11 @@ const StatusIndicator = () => {
                         marginLeft: 3,
                     },
                 }}
-                display="none"
-                overflow="hidden"
-                w={0}
-                maxW="full"
-                opacity={0}
-                variants={textVariants}
-                whiteSpace="nowrap"
-                textOverflow="ellipsis"
             >
                 {"some message here"}
             </MotionText>
         </MotionHStack>
+
     );
 };
 
