@@ -16,16 +16,24 @@ const Code = dynamic<any>(
     () => import('react-notion-x/build/third-party/code').then((m) => m.Code)
 );
 
+const Collection = dynamic<any>(() =>
+  import('react-notion-x/build/third-party/collection').then(
+    (m) => m.Collection
+  )
+)
+
 const Post: NextPage<IPostPageProps> = ({ recordMap }: IPostPageProps) => {
 
     const { colorMode } = useColorMode();
     return (
         <NotionRenderer
             recordMap={recordMap}
-            fullPage={false}
-            components={{ Code }}
+            fullPage={true}
+            components={{ Code, Collection}}
             disableHeader
             showTableOfContents
+            linkTableTitleProperties
+            minTableOfContentsItems = {2}
             darkMode={colorMode === 'dark'} />
     )
 }

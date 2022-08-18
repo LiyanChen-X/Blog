@@ -19,7 +19,7 @@ export type PostProperties = {
         status?: SelectPropertyResponse,
         type: "status",
     },
-    Tag: {
+    Tags: {
         id: string,
         type: "multi_select",
         multi_select: Array<SelectPropertyResponse>

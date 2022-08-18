@@ -13,7 +13,7 @@ export function transformNotionPage(page: NotionPostPage): BlogPost {
     const desc = properties.Description.rich_text.map((t) => t.plain_text).join(" ");
 
     // TODO: need extract colors
-    const pageTags = properties.Tag.multi_select.map(_ => _.name);
+    const pageTags = properties.Tags.multi_select.map(_ => _.name);
 
     const pageStatus = properties.Status.status?.name ?? "";
 
