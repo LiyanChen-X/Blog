@@ -1,9 +1,5 @@
 import type { GetStaticProps, NextPage } from 'next'
-import CalendarHeatmap from 'react-calendar-heatmap'
-import 'react-calendar-heatmap/dist/styles.css'
-import dayjs from "dayjs"
 import { FcApproval, FcDocument, FcEditImage, FcEngineering } from "react-icons/fc";
-import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaRegSadTear } from "react-icons/fa";
 import PostCard from "../../components/blog-post-card"
@@ -26,24 +22,7 @@ const MotionBox = motion<BoxProps>(Box)
 
 const Posts: NextPage<Props> = ({ posts }: Props) => {
 
-    //TODO: notion api do not support getting contributions yet;
-    const activeCountsPerDay = new Map<string, number>();
-    const createdTimes = posts.map((post) => post.createdTime);
 
-    for (const createdTime of createdTimes) {
-        const date = new Date(createdTime!);
-        // TODO: use dayjs instead;
-        const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-        const count = activeCountsPerDay.get(dateString) ?? 0;
-        activeCountsPerDay.set(dateString, count + 1);
-    }
-    const contributions = Array.from(activeCountsPerDay.entries()).map(([date, count]) => ({
-        date,
-        count
-    }))
-    // show contributions from the last year;
-    const startDate = dayjs().subtract(1, "year").format("YYYY-MM-DD");
-    const endDate = dayjs().format("YYYY-MM-DD");
     const tags = useMemo(() => {
         const enableStatus = new Set<string>();
         for (const post of posts) {
@@ -104,14 +83,6 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
                         <ListIcon as={FcApproval} /> {posts.filter((_) => _.pageStatus === "Published").length} in Published State
                     </ListItem>
                 </List>
-            </Box>
-
-            <Box >
-                <CalendarHeatmap
-                    startDate={new Date(startDate)}
-                    endDate={new Date(endDate)}
-                    values={contributions}
-                />
             </Box>
 
             <Box>
