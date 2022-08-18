@@ -79,7 +79,7 @@ const NavBar = (props: {
             <Container
                 display="flex"
                 p={2}
-                maxW="container.lg"
+                maxW="container.md"
                 flexWrap="wrap"
                 alignItems="center"
                 justifyContent="space-between"

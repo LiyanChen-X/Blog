@@ -1,18 +1,19 @@
-import { Box, Button, chakra, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Button, chakra, Flex, Image, Text, FlexProps } from "@chakra-ui/react";
 
-export type ITimelineCardProps = {
+export type ITimelineCardProps = FlexProps & {
     title: string;
     imgUrl: string;
     description: string;
 }
 
 export default function TimelineCard(props: ITimelineCardProps) {
-    const { title, imgUrl, description } = props;
+    const { title, imgUrl, description, ...rest } = props;
     return (
         <Flex
             w="full"
             alignItems="center"
             justifyContent="center"
+            {...rest}
         >
             <Flex
                 maxW="md"
