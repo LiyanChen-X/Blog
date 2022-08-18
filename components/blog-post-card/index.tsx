@@ -1,22 +1,13 @@
 import { Badge, Heading, HStack, LinkBox, LinkOverlay, StackDivider, Text, VStack, Icon, useBreakpointValue, Box, Flex, Button, Stack } from "@chakra-ui/react";
 import NextLink from 'next/link';
-import Image from 'next/image';
 import { Global } from "@emotion/react";
 import dayjs from "dayjs"
 import { FiArrowRight } from "react-icons/fi";
-export interface IPostCardProps {
-    id: string,
-    title: string,
-    desc: string,
-    thumbnail?: string,
-    href: string,
-    createdTime: string,
-    pageTags: string[],
-    pageStatus?: string,
-}
+import { BlogPost } from "../../types/blog-post";
+
 
 // TODO: how to handle thumnail empty case;
-export default function PostCard(props: IPostCardProps) {
+export default function PostCard(props: BlogPost) {
     const { desc, href, createdTime, pageTags } = props;
     const hidePointer = useBreakpointValue({ base: true, md: false })
     return (
@@ -126,12 +117,3 @@ export default function PostCard(props: IPostCardProps) {
         </LinkBox>
     )
 }
-
-export const PostCardStyle = () => (
-    <Global styles={
-        `.post-item-thumbnail {
-            border-radius: 6px;
-        }`
-    } />
-
-)

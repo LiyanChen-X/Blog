@@ -4,7 +4,6 @@ import NavBar from '../navbar'
 import { Box, chakra, ColorMode, Container, useColorMode } from '@chakra-ui/react'
 import Footer from '../footer'
 import { Router } from 'next/router'
-import { PostCardStyle } from '../post-card'
 import { motion, useAnimationControls, Variants } from "framer-motion";
 
 export interface ILayoutProps {
@@ -67,7 +66,6 @@ const Main = ({ children, router }: ILayoutProps) => {
                 </Box>
             </Container>
             <ChakraFooter flexGrow={0} flexShrink={0} />
-            <PostCardStyle />
         </Box>
     )
 }

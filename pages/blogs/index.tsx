@@ -6,7 +6,7 @@ import { FcApproval, FcDocument, FcEditImage, FcEngineering } from "react-icons/
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaRegSadTear } from "react-icons/fa";
-import PostCard, { IPostCardProps } from "../../components/post-card"
+import PostCard from "../../components/blog-post-card"
 import { Box, BoxProps, Button, Flex, FlexProps, Heading, HStack, Icon, Input, InputGroup, InputLeftElement, List, ListIcon, ListItem, SimpleGrid, Stack, StackProps, Tag, TagLabel, TagLeftIcon, Text, VStack } from '@chakra-ui/react'
 import { getDatabase, NotionPostPage, PostProperties } from '../../lib/notion'
 import { ChangeEventHandler, MouseEventHandler, useCallback, useMemo, useState } from 'react';
@@ -14,23 +14,22 @@ import Pagination from "rc-pagination";
 import "rc-pagination/assets/index.css";
 import { transformNotionPage } from '../../lib/transform-notion-page';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { BlogPost } from '../../types/blog-post';
 
 type Props = {
-    pages: NotionPostPage[]
+    posts: BlogPost[]
 }
 
 const MotionFlex = motion<FlexProps>(Flex);
 const MotionBox = motion<BoxProps>(Box)
 
 
-const Posts: NextPage<Props> = ({ pages }: Props) => {
+const Posts: NextPage<Props> = ({ posts }: Props) => {
 
     //TODO: notion api do not support getting contributions yet;
     const activeCountsPerDay = new Map<string, number>();
-    const createdTimes = pages.map((page) => {
-        const properties: PostProperties = page.properties;
-        return properties.CreatedTime.created_time;
-    });
+    const createdTimes = posts.map((post) => post.createdTime);
+
     for (const createdTime of createdTimes) {
         const date = new Date(createdTime!);
         // TODO: use dayjs instead;
@@ -45,7 +44,6 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
     // show contributions from the last year;
     const startDate = dayjs().subtract(1, "year").format("YYYY-MM-DD");
     const endDate = dayjs().format("YYYY-MM-DD");
-    const posts = pages.map((page) => transformNotionPage(page));
     const tags = useMemo(() => {
         const enableStatus = new Set<string>();
         for (const post of posts) {
@@ -56,7 +54,7 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         return enableStatus
     }, [posts]);
 
-    const [selectedTag, setSelectedTag] = useState<string>();
+    const [selectedTag, setSelectedTag] = useState<string>("");
     const [searchStr, setSearchStr] = useState("");
     const [displayPosts, setDisplayPosts] = useState(posts);
 
@@ -64,12 +62,12 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         const query = event.currentTarget.value;
         setSearchStr(query);
         const filteredPosts = posts.filter((post) => {
-            return post.title.toLowerCase().includes(query.toLowerCase());
+            return post.title.toLowerCase().includes(query.toLowerCase()) && post.pageTags.includes(selectedTag);
         });
         setDisplayPosts(filteredPosts);
-    }, [posts]);
+    }, [posts, selectedTag]);
 
-    const onTagClick = (tag?: string) => {
+    const onTagClick = (tag: string) => {
         if (tag) {
             setDisplayPosts(posts.filter(post => post.pageTags.includes(tag)));
         } else {
@@ -93,7 +91,7 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
         <Box marginBottom={4}>
             <Box mb={2}>
                 <Text mb={2}>
-                    Total {pages.length} pages:
+                    Total {posts.length} pages:
                 </Text>
                 <List spacing={3}>
                     <ListItem>
@@ -130,7 +128,7 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
                 <Button
                     textTransform="uppercase"
                     colorScheme="purple"
-                    onClick={() => onTagClick()}
+                    onClick={() => onTagClick("")}
                     size="xs"
                     variant={!selectedTag ? "solid" : "ghost"}
                 >
@@ -201,31 +199,6 @@ const Posts: NextPage<Props> = ({ pages }: Props) => {
 }
 
 
-export type ITagButtonProps = {
-    selected: boolean,
-    onClick: (label: string) => void,
-    label: string,
-}
-const TagButton = (props: ITagButtonProps) => {
-    const {
-        selected,
-        onClick,
-        label,
-    } = props;
-
-    const onTagClick: MouseEventHandler<HTMLDivElement> = useCallback((event) => {
-        onClick(label);
-    }, [label, onClick]);
-
-    return (
-        <Tag cursor={"pointer"} size="md" borderRadius="md" variant="subtle" color={selected ? "gray.800" : "gray.400"} onClick={onTagClick}>
-            <TagLeftIcon as={selected ? MdRadioButtonChecked : MdRadioButtonUnchecked}></TagLeftIcon>
-            <TagLabel> {`${label}`} </TagLabel>
-        </Tag>
-    );
-}
-
-
 export default Posts;
 
 // TODO: utlize redis cache for this kind of data; 
@@ -239,11 +212,9 @@ export const getStaticProps: GetStaticProps = async () => {
 
     const pages = await getDatabase();
 
-
-
     return {
         props: {
-            pages: pages,
+            posts: pages.map((page: any) => transformNotionPage(page)),
         }
     }
 }
