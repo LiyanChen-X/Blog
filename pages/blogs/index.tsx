@@ -39,11 +39,11 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
 
     const onSearch: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
         const query = event.currentTarget.value;
-        setSearchStr(query);
         const filteredPosts = posts.filter((post) => {
-            return post.title.toLowerCase().includes(query.toLowerCase()) && post.pageTags.includes(selectedTag);
+            return post.title.toLowerCase().includes(query.toLowerCase()) && (!selectedTag || post.pageTags.includes(selectedTag));
         });
         setDisplayPosts(filteredPosts);
+        setSearchStr(query);
     }, [posts, selectedTag]);
 
     const onTagClick = (tag: string) => {
