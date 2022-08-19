@@ -8,8 +8,6 @@ import {
 } from 'react-icons/si';
 import { IoMoon } from 'react-icons/io5';
 
-export const PLAUSIBLE_LINK = 'https://plausible.io/nikolovlazar.com';
-
 
 type BaseItem = {
     title: string;
@@ -47,7 +45,7 @@ export const searchItems: SearchItemsType = {
         },
         {
             title: 'Analytics',
-            href: PLAUSIBLE_LINK,
+            href: "/analytics",
         },
         {
             title: 'Bookmarks',
