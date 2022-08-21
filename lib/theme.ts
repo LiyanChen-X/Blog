@@ -38,6 +38,8 @@ const fonts = {
 
 const colors = {
     grassTeal: '#88ccca',
+    activeBlue: "#3d7aed",
+    activePink: "#ff63c3"
 }
 
 const config = {

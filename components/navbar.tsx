@@ -68,7 +68,14 @@ const NavBar = (props: {
 
                 <Flex flex={1} justifyContent="right">
                     <ThemeToggleButton />
-                    <Tooltip label={`Command Palette (${shortcut})`}>
+                    <Tooltip label={`Command Palette (${shortcut})`} modifiers={[
+                        {
+                            name: "preventOverflow",
+                            options: {
+                                padding: 8
+                            }
+                        }
+                    ]}>
                         <IconButton
                             aria-label="Command"
                             icon={<FiCommand />}

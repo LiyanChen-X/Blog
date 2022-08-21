@@ -1,4 +1,4 @@
-import { Badge, Heading, HStack, LinkBox, LinkOverlay, StackDivider, Text, VStack, Icon, useBreakpointValue, Box, Flex, Button, Stack } from "@chakra-ui/react";
+import { Badge, Heading, HStack, LinkBox, LinkOverlay, StackDivider, Text, VStack, Icon, useBreakpointValue, Box, Flex, Button, Stack, useColorModeValue } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import { Global } from "@emotion/react";
 import dayjs from "dayjs"
@@ -9,11 +9,12 @@ import { BlogPost } from "../../types/blog-post";
 // TODO: how to handle thumnail empty case;
 export default function PostCard(props: BlogPost) {
     const { desc, href, createdTime, pageTags } = props;
-    const hidePointer = useBreakpointValue({ base: true, md: false })
+    const hidePointer = useBreakpointValue({ base: true, md: false });
+    const tagColorSchema = useColorModeValue("blue", "purple");
     return (
         <LinkBox as="article" role="group" position="relative">
             <HStack
-                p={{ base: 0, md: 2 }}
+                p={{ base: 1, md: 3 }}
                 _hover={{
                     bg: 'gray.100',
                     transform: 'scale(1.02, 1.02)',
@@ -48,7 +49,7 @@ export default function PostCard(props: BlogPost) {
                                 {
                                     pageTags.map((name) => (
                                         <Text fontSize="sm" color="gray.500" key={name}>
-                                            <Badge colorScheme="blue">
+                                            <Badge colorScheme={tagColorSchema}>
                                                 {name}
                                             </Badge>
                                         </Text>

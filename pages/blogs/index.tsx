@@ -1,9 +1,8 @@
 import type { GetStaticProps, NextPage } from 'next'
-import { FcApproval, FcDocument, FcEditImage, FcEngineering } from "react-icons/fc";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaRegSadTear } from "react-icons/fa";
 import PostCard from "../../components/blog-post-card"
-import { Box, BoxProps, Button, Flex, FlexProps, Heading, HStack, Icon, Input, InputGroup, InputLeftElement, List, ListIcon, ListItem, SimpleGrid, Stack, StackProps, Tag, TagLabel, TagLeftIcon, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Button, Flex, FlexProps, Heading, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, List, ListIcon, ListItem, SimpleGrid, Stack, StackProps, Tag, TagLabel, TagLeftIcon, Text, useColorModeValue, VStack } from '@chakra-ui/react'
 import { getDatabase, NotionPostPage, PostProperties } from '../../lib/notion'
 import { ChangeEventHandler, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import Pagination from "rc-pagination";
@@ -11,6 +10,7 @@ import "rc-pagination/assets/index.css";
 import { transformNotionPage } from '../../lib/transform-notion-page';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { BlogPost } from '../../types/blog-post';
+
 
 type Props = {
     posts: BlogPost[]
@@ -21,7 +21,6 @@ const MotionBox = motion<BoxProps>(Box)
 
 
 const Posts: NextPage<Props> = ({ posts }: Props) => {
-
 
     const tags = useMemo(() => {
         const enableStatus = new Set<string>();
@@ -37,33 +36,34 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
     const [searchStr, setSearchStr] = useState("");
     const [displayPosts, setDisplayPosts] = useState(posts);
 
-    const onSearch: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
+    const onSearch: ChangeEventHandler<HTMLInputElement> = (event) => {
         const query = event.currentTarget.value;
-        const filteredPosts = posts.filter((post) => {
-            return post.title.toLowerCase().includes(query.toLowerCase()) && (!selectedTag || post.pageTags.includes(selectedTag));
-        });
-        setDisplayPosts(filteredPosts);
         setSearchStr(query);
-    }, [posts, selectedTag]);
+    };
 
     const onTagClick = (tag: string) => {
-        if (tag) {
-            setDisplayPosts(posts.filter(post => post.pageTags.includes(tag)));
-        } else {
-            setDisplayPosts(posts);
-        }
         setSelectedTag(tag);
     }
 
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
 
+    const filteredItems = useMemo(() => {
+        return posts.filter(post => !selectedTag || post.pageTags.includes(selectedTag)).filter(post => !searchStr || post.title.toLowerCase().includes(searchStr.toLowerCase()));
+    }, [posts, searchStr, selectedTag])
+
     const renderedItems = useMemo(() => {
         const start = (currentPage - 1) * pageSize;
         const end = start + pageSize;
-        return displayPosts.slice(start, end);
-    }, [currentPage, displayPosts]);
+        return filteredItems.slice(start, end);
+    }, [filteredItems, pageSize, currentPage]);
 
+    const paginationThemeColor = useColorModeValue('blue', 'purple');
+    const activeColorDegree = useColorModeValue('700', '500');
+
+    const bgColor = `var(--chakra-colors-${paginationThemeColor}-100)`;
+    const activeColor = `var(--chakra-colors-${paginationThemeColor}-${activeColorDegree})`;
+    const tagColorSchema = useColorModeValue("blue", "purple");
 
     // TODO: replace with algolia search;
     return (
@@ -87,7 +87,7 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
             <HStack my={2} flexWrap="wrap" rowGap={"2"}>
                 <Button
                     textTransform="uppercase"
-                    colorScheme="purple"
+                    colorScheme={tagColorSchema}
                     onClick={() => onTagClick("")}
                     size="xs"
                     variant={!selectedTag ? "solid" : "ghost"}
@@ -99,7 +99,7 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
                         <Button
                             key={tag}
                             textTransform="uppercase"
-                            colorScheme="purple"
+                            colorScheme={tagColorSchema}
                             onClick={() => onTagClick(tag)}
                             size="xs"
                             variant={selectedTag === tag ? "solid" : "ghost"}
@@ -112,7 +112,7 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
 
             <VStack width="100%" alignItems="flex-start">
                 <AnimatePresence>
-                    {!displayPosts.length &&
+                    {!filteredItems.length &&
                         <MotionFlex key="No-Posts-Icon" align={"center"} mt="6" width="100%" direction="column"
                             initial={{ opacity: 0, x: 0, y: 50 }}
                             animate={{ opacity: 1, x: 0, y: 0 }}
@@ -144,8 +144,47 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
 
                                     })
                                 }
-                                <MotionFlex layout justifyContent="center" my={3}>
-                                    <Pagination total={displayPosts.length} current={currentPage} onChange={(pageNumber) => setCurrentPage(pageNumber)} />
+                                <MotionFlex layout justifyContent="center" my={3} sx={
+                                    {
+                                        ".rc-pagination-prev": {
+                                            backgroundColor: bgColor,
+                                            ".rc-pagination-item-link": {
+                                                backgroundColor: bgColor,
+                                                color: "white",
+                                                border: "none",
+                                            },
+                                        },
+                                        ".rc-pagination-next": {
+                                            backgroundColor: bgColor,
+                                            ".rc-pagination-item-link": {
+                                                backgroundColor: bgColor,
+                                                color: "white",
+                                                border: "none",
+                                            },
+                                        },
+
+                                        ".rc-pagination-item": {
+                                            backgroundColor: bgColor,
+                                            borderColor: bgColor,
+                                            a: {
+                                                color: "white",
+                                            },
+                                            "&.rc-pagination-item-active": {
+                                                borderColor: activeColor,
+                                                backgroundColor: activeColor,
+                                                a: {
+                                                    color: "white",
+                                                }
+                                            },
+                                        }
+                                    }
+                                }>
+                                    <Pagination
+                                        total={filteredItems.length}
+                                        current={currentPage}
+                                        pageSize={pageSize}
+                                        onChange={(pageNumber) => setCurrentPage(pageNumber)}
+                                    />
                                 </MotionFlex>
                             </LayoutGroup>
                         </Box >
