@@ -84,7 +84,7 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
             </Box>
 
 
-            <HStack my={2}>
+            <HStack my={2} flexWrap="wrap" rowGap={"2"}>
                 <Button
                     textTransform="uppercase"
                     colorScheme="purple"
