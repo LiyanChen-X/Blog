@@ -1,4 +1,4 @@
-import { Heading, VStack, List, ListItem, Icon, Box, Link } from "@chakra-ui/react";
+import { Heading, VStack, List, ListItem, Icon, Box, Link, useColorModeValue } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { CgArrowRight } from "react-icons/cg";
 import CalendarHeatmap from 'react-calendar-heatmap'
@@ -32,12 +32,37 @@ const BlogpostsSection = ({ posts }: Props) => {
     const startDate = dayjs().subtract(1, "year").format("YYYY-MM-DD");
     const endDate = dayjs().format("YYYY-MM-DD");
     return (
-        <VStack as="section" alignItems="flex-start" w="full" spacing={4}>
+        <VStack as="section" alignItems="flex-start" w="full" spacing={2}
+            sx={{
+                ".react-calendar-heatmap .color-empty": {
+                    fill: useColorModeValue("#eee", "#2D3748")
+                },
+                ".react-calendar-heatmap .color-scale-1": {
+                    fill: useColorModeValue("#d6e685", "#acd5f2")
+                },
+                ".react-calendar-heatmap .color-scale-2": {
+                    fill: useColorModeValue("#8cc665", "#7fa8d1")
+                },
+                ".react-calendar-heatmap .color-scale-3": {
+                    fill: useColorModeValue("#44a340", "#49729b")
+                },
+                ".react-calendar-heatmap .color-scale-4": {
+                    fill: useColorModeValue("#1e6823", "#527ba0")
+                }
+            }}>
             <Heading size="md">Recent blog posts.</Heading>
             <CalendarHeatmap
                 startDate={new Date(startDate)}
                 endDate={new Date(endDate)}
                 values={contributions}
+                showMonthLabels
+                showWeekdayLabels
+                classForValue={(value) => {
+                    if (!value) {
+                        return 'color-empty';
+                    }
+                    return `color-scale-${Math.min(4, value.count)}`;
+                }}
             />
             <List w="full" spacing={{ base: 8, md: 2 }}>
                 {recentPosts.map((post) => (
@@ -58,7 +83,7 @@ const BlogpostsSection = ({ posts }: Props) => {
                     <Icon
                         as={CgArrowRight}
                         ml={1}
-                        color="purple.500"
+                        color={useColorModeValue("#3d7aed", "#ff63c3")}
                         _groupHover={{ ml: 3 }}
                         transitionDuration="slow"
                         transitionProperty="margin-left"
@@ -66,7 +91,7 @@ const BlogpostsSection = ({ posts }: Props) => {
                     />
                 </Link>
             </Box>
-        </VStack>
+        </VStack >
     );
 };
 

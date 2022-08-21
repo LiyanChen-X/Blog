@@ -10,6 +10,8 @@ import {
 } from '@chakra-ui/react';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { MicrosoftIcon } from "../icons/microsoft";
+// @ts-ignore
+import TypeIt from "typeit-react";
 
 const Hero = () => {
     return <Stack
@@ -32,7 +34,9 @@ const Hero = () => {
                 </Heading>
             </Stack>
             <Text as="h2" lineHeight="175%">
-                Full-stack engineer working at <Icon as={MicrosoftIcon} boxSize={5} />.
+                <TypeIt>
+                    Full-stack engineer working at <Icon as={MicrosoftIcon} boxSize={5} />.
+                </TypeIt>
             </Text>
 
         </VStack>

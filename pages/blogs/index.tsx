@@ -72,17 +72,6 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
                 <Text mb={2}>
                     Total {posts.length} pages:
                 </Text>
-                <List spacing={3}>
-                    <ListItem>
-                        <ListIcon as={FcEditImage} /> {posts.filter((_) => _.pageStatus === "Draft").length} in Draft State.
-                    </ListItem>
-                    <ListItem>
-                        <ListIcon as={FcDocument} /> {posts.filter((_) => _.pageStatus === "In Review").length} in Review State
-                    </ListItem>
-                    <ListItem>
-                        <ListIcon as={FcApproval} /> {posts.filter((_) => _.pageStatus === "Published").length} in Published State
-                    </ListItem>
-                </List>
             </Box>
 
             <Box>

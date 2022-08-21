@@ -4,19 +4,12 @@ import { useContext, useEffect, useState } from 'react';
 import {
     Container,
     Box,
-    Link,
-    Stack,
     Heading,
     Flex,
-    Menu,
-    MenuItem,
-    MenuList,
-    MenuButton,
     IconButton,
     useColorModeValue,
     Tooltip
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { CmdPaletteContext } from "../providers/cmd-palette-provider";
 import { FiCommand } from 'react-icons/fi';
@@ -30,23 +23,6 @@ export interface ILinkItemProps {
     [x: string]: any;
 }
 
-const LinkItem = ({ href, path, target, children, ...props }: ILinkItemProps) => {
-    const active = path === href
-    const inactiveColor = useColorModeValue('gray200', 'whiteAlpha.900')
-    return (
-        <NextLink href={href} passHref scroll={false}>
-            <Link
-                p={2}
-                bg={active ? 'grassTeal' : undefined}
-                color={active ? '#202023' : inactiveColor}
-                target={target}
-                {...props}
-            >
-                {children}
-            </Link>
-        </NextLink>
-    )
-}
 
 const NavBar = (props: {
     path: string,
@@ -58,7 +34,7 @@ const NavBar = (props: {
 
     useEffect(() => {
         setShortcut(
-            navigator.userAgent.indexOf('Mac OS X') != -1 ? 'Cmd + K' : 'Ctrl + K'
+            navigator.userAgent.indexOf('Mac OS X') != -1 ? 'Cmd + P' : 'Ctrl + P'
         );
     }, [setShortcut]);
 
@@ -94,7 +70,7 @@ const NavBar = (props: {
                     <ThemeToggleButton />
                     <Tooltip label={`Command Palette (${shortcut})`}>
                         <IconButton
-                            aria-label="toggle theme"
+                            aria-label="Command"
                             icon={<FiCommand />}
                             onClick={openCommandPalette}
                             size="sm"

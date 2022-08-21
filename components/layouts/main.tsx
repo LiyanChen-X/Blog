@@ -40,7 +40,7 @@ const Main = ({ children, router }: ILayoutProps) => {
     //@expect-ts-error
     return (
         <Box as={motion.main}
-            pb={8}
+            pb={2}
             variants={variants}
             initial="hidden"
             animate="enter"
@@ -60,7 +60,7 @@ const Main = ({ children, router }: ILayoutProps) => {
                 <title>Liyan&apos;s blog - Homepage</title>
             </Head>
             <NavBar path={router.asPath} />
-            <Container maxW="container.md" pt={14} flexGrow={1} >
+            <Container maxW="container.md" pt={14} flexGrow={1} pb={8}>
                 <Box>
                     {children}
                 </Box>

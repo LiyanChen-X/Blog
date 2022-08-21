@@ -15,9 +15,10 @@ const LogoBox = styled.span`
     img {
         transition: 200ms ease;
     }
-
-    &:hover img {
-        transform: rotate(-20deg) scale(1.2);
+    @media (hover: hover) and (pointer: fine) {
+        &:hover img {
+            transform: rotate(-20deg) scale(1.2);
+        }
     }
 `
 

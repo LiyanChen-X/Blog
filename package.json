@@ -29,7 +29,8 @@
     "react-json-view": "^1.21.3",
     "react-notion-x": "^6.12.0",
     "react-use": "^17.4.0",
-    "redis": "^4.2.0"
+    "redis": "^4.2.0",
+    "typeit-react": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "18.6.4",

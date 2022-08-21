@@ -24,9 +24,12 @@ export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
 
-  // TODO: only select data of last year
-  // const { results: pages } = await notion.databases.query({
-  //     database_id: getEnv("NOTION_DATABASE_ID")
+  // TODO: Notion API is confusuing right now, we cannot filter status... What a shame
+  // const pages = await getDatabase({
+  //   "property": "Status",
+  //   "status": {
+  //     "equals": "Published"
+  //   }
   // });
 
   const pages = await getDatabase();

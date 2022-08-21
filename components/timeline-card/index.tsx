@@ -13,15 +13,15 @@ export default function TimelineCard(props: ITimelineCardProps) {
             w="full"
             alignItems="center"
             justifyContent="center"
+            shadow="sm"
+            rounded="md"
+            borderColor="gray.200"
+            borderWidth="1px"
             {...rest}
         >
             <Flex
                 maxW="md"
                 mx="auto"
-                shadow="sm"
-                rounded="lg"
-                borderWidth="1px"
-                borderColor="gray.200"
                 overflow="hidden"
             >
 

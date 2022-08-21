@@ -6,6 +6,7 @@ import { ExtendedRecordMap } from "notion-types";
 import { NotionRenderer } from "react-notion-x";
 import dynamic from "next/dynamic";
 import { getEnv } from '../../lib/get-config-value';
+import ScrollToTopButton from '../../components/scroll-to-top-button';
 
 type IPostPageProps = {
     recordMap: ExtendedRecordMap
@@ -17,24 +18,28 @@ const Code = dynamic<any>(
 );
 
 const Collection = dynamic<any>(() =>
-  import('react-notion-x/build/third-party/collection').then(
-    (m) => m.Collection
-  )
+    import('react-notion-x/build/third-party/collection').then(
+        (m) => m.Collection
+    )
 )
 
 const Post: NextPage<IPostPageProps> = ({ recordMap }: IPostPageProps) => {
 
     const { colorMode } = useColorMode();
     return (
-        <NotionRenderer
-            recordMap={recordMap}
-            fullPage={true}
-            components={{ Code, Collection}}
-            disableHeader
-            showTableOfContents
-            linkTableTitleProperties
-            minTableOfContentsItems = {2}
-            darkMode={colorMode === 'dark'} />
+        <>
+            <NotionRenderer
+                recordMap={recordMap}
+                fullPage={true}
+                components={{ Code, Collection }}
+                disableHeader
+                showTableOfContents
+                linkTableTitleProperties
+                minTableOfContentsItems={2}
+                darkMode={colorMode === 'dark'} />
+            <ScrollToTopButton />
+        </>
+
     )
 }
 

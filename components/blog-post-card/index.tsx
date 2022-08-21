@@ -44,15 +44,19 @@ export default function PostCard(props: BlogPost) {
                             <Text fontSize="sm" color="gray.500">
                                 {dayjs(createdTime).format("YYYY-MM-DD")}
                             </Text>
-                            <Text fontSize="sm" color="gray.500">
+                            <HStack>
                                 {
                                     pageTags.map((name) => (
-                                        <Badge key={name} colorScheme="teal">
-                                            {name}
-                                        </Badge>
+                                        <Text fontSize="sm" color="gray.500" key={name}>
+                                            <Badge colorScheme="blue">
+                                                {name}
+                                            </Badge>
+                                        </Text>
+
                                     ))
                                 }
-                            </Text>
+                            </HStack>
+
                         </HStack>
                     </VStack>
                     <Text color="gray.500" fontSize="sm" >
@@ -69,7 +73,7 @@ export default function PostCard(props: BlogPost) {
                         <Icon
                             as={FiArrowRight}
                             boxSize={6}
-                            color="purple.500"
+                            color="gray.500"
                             opacity={0}
                             _groupHover={{ ml: 6, opacity: 1 }}
                             transitionDuration="slow"
