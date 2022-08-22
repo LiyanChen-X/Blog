@@ -214,6 +214,7 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             posts: pages.map((page: any) => transformNotionPage(page)),
-        }
+        },
+        revalidate: 10
     }
 }
