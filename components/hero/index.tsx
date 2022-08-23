@@ -7,6 +7,12 @@ import {
     Button,
     Icon,
     Link,
+    Box,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
 } from '@chakra-ui/react';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { MicrosoftIcon } from "../icons/microsoft";
@@ -38,7 +44,6 @@ const Hero = () => {
                     Full-stack engineer working at <Icon as={MicrosoftIcon} boxSize={5} />.
                 </TypeIt>
             </Text>
-
         </VStack>
         <HeroImage />
     </Stack>

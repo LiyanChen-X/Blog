@@ -12,7 +12,7 @@ export default function Timeline() {
     });
     return (
         <Flex w="full" direction="column" alignItems="center">
-            <Heading size="md" py={4} w="100%">Journey</Heading>
+            <Heading size="md" py={4} w="100%" variant={"section-title"}>Journey</Heading>
             <Flex direction="column" w="90%" sx={{
                 '.timeline-card': {
                     minHeight: "initial",

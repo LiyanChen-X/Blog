@@ -1,6 +1,7 @@
 import { Stack } from '@chakra-ui/react';
 import type { GetStaticProps, NextPage } from 'next'
 import BlogpostsSection from '../components/blog-section';
+import { FAQ } from '../components/faq';
 import Hero from "../components/hero";
 import Timeline from "../components/timeline";
 import { getDatabase } from '../lib/notion';
@@ -13,10 +14,11 @@ type Props = {
 
 const Home: NextPage<Props> = ({ posts }: Props) => {
   return (
-    <Stack>
+    <Stack spacing={6}>
       <Hero />;
       <Timeline />
       <BlogpostsSection posts={posts} />
+      <FAQ />
     </Stack>);
 }
 
