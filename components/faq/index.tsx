@@ -1,10 +1,6 @@
 import {
-    Stack,
     VStack,
     Heading,
-    Text,
-    Button,
-    Icon,
     Link,
     Box,
     Accordion,
@@ -24,7 +20,7 @@ export const FAQ = () => {
             <Accordion allowToggle w="full" allowMultiple>
                 <AccordionItem>
                     <h2>
-                        <AccordionButton>
+                        <AccordionButton height={12}>
                             <Box flex='1' textAlign='left'>
                                 <Heading size="sm"> 🚀 What is my Tech Stack? </Heading>
                             </Box>
@@ -38,7 +34,7 @@ export const FAQ = () => {
 
                 <AccordionItem>
                     <h2>
-                        <AccordionButton>
+                        <AccordionButton height = {12}>
                             <Box flex='1' textAlign='left'>
                                  <Heading size="sm">📧 How to contact me?</Heading>
                             </Box>
