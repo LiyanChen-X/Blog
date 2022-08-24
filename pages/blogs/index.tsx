@@ -34,7 +34,6 @@ const Posts: NextPage<Props> = ({ posts }: Props) => {
 
     const [selectedTag, setSelectedTag] = useState<string>("");
     const [searchStr, setSearchStr] = useState("");
-    const [displayPosts, setDisplayPosts] = useState(posts);
 
     const onSearch: ChangeEventHandler<HTMLInputElement> = (event) => {
         const query = event.currentTarget.value;
@@ -214,6 +213,7 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             posts: pages.map((page: any) => transformNotionPage(page)),
-        }
+        },
+        revalidate: 10
     }
 }

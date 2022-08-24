@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { Text, useColorMode } from "@chakra-ui/react";
-import type { GetServerSideProps, NextPage } from 'next'
+import { Box, BoxProps, Stack, Text, useColorMode, useColorModeValue, VStack, Skeleton, SkeletonText, SkeletonCircle } from "@chakra-ui/react";
+import type { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { NotionAPI } from "notion-client";
 import { ExtendedRecordMap } from "notion-types";
 import { NotionRenderer } from "react-notion-x";
 import dynamic from "next/dynamic";
 import { getEnv } from '../../lib/get-config-value';
 import ScrollToTopButton from '../../components/scroll-to-top-button';
+import { getDatabase } from '../../lib/notion';
+import { useRef } from 'react';
+import useUtterancesParams from '../../hooks/useUtterance';
+import { motion } from 'framer-motion';
 
 type IPostPageProps = {
     recordMap: ExtendedRecordMap
@@ -23,28 +27,47 @@ const Collection = dynamic<any>(() =>
     )
 )
 
+const MotionBox = motion<BoxProps>(Box);
+
+
 const Post: NextPage<IPostPageProps> = ({ recordMap }: IPostPageProps) => {
 
     const { colorMode } = useColorMode();
+    const comments = useRef<HTMLDivElement>(null);
+    const theme = useColorModeValue("boxy-light", "dark-blue");
+    const status = useUtterancesParams({
+        theme: theme,
+        issueTerm: "pathname",
+        repo: "LiyanChen-X/Blog",
+        ref: comments
+    });
+    const commentsLoaded = status === "ready";
     return (
-        <>
+        <Box>
             <NotionRenderer
                 recordMap={recordMap}
-                fullPage={true}
                 components={{ Code, Collection }}
                 disableHeader
-                showTableOfContents
                 linkTableTitleProperties
-                minTableOfContentsItems={2}
+                fullPage
                 darkMode={colorMode === 'dark'} />
-            <ScrollToTopButton />
-        </>
 
+                <MotionBox w="full"
+                    ref={comments}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: commentsLoaded ? 1 : 0 }}
+                    // @ts-expect-error
+                    transition={{ duration: 0.5 }}
+                />
+
+
+            <ScrollToTopButton />
+        </Box>
     )
 }
 
 // TODO: notion api is still not stable, will use the api to render once the api is stable;
-export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const postId = params!.postId as string;
     const notion = new NotionAPI(
         {
@@ -57,7 +80,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
     return {
         props: {
             recordMap,
-        }
+        },
+        revalidate: 10,
+    }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const pages = await getDatabase();
+    return {
+        paths: pages.map((page) => ({
+            params: {
+                postId: page.id
+            }
+        })),
+        fallback: "blocking"
     }
 }
 

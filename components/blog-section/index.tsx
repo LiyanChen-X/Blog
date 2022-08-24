@@ -32,7 +32,7 @@ const BlogpostsSection = ({ posts }: Props) => {
     const startDate = dayjs().subtract(1, "year").format("YYYY-MM-DD");
     const endDate = dayjs().format("YYYY-MM-DD");
     return (
-        <VStack as="section" alignItems="flex-start" w="full" spacing={2}
+        <VStack as="section" alignItems="flex-start" w="full" spacing={4}
             sx={{
                 ".react-calendar-heatmap .color-empty": {
                     fill: useColorModeValue("#eee", "#2D3748")
@@ -50,7 +50,7 @@ const BlogpostsSection = ({ posts }: Props) => {
                     fill: useColorModeValue("#1e6823", "#527ba0")
                 }
             }}>
-            <Heading size="md">Recent blog posts.</Heading>
+            <Heading size="md" variant={"section-title"}>Recent blog posts</Heading>
             <CalendarHeatmap
                 startDate={new Date(startDate)}
                 endDate={new Date(endDate)}

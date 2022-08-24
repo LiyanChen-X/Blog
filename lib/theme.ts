@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { ComponentStyleConfig, extendTheme } from "@chakra-ui/react";
 import { mode, StyleFunctionProps } from "@chakra-ui/theme-tools";
 import { Dict } from "@chakra-ui/utils";
 
@@ -13,15 +13,15 @@ const styles = {
 const components = {
     Heading: {
         variants: {
-            'section-title': {
+            'section-title': (props: StyleFunctionProps | Dict<any>) => ({
                 textDecoration: 'underline',
                 fontSize: 20,
-                textUnderlineOffset: 6,
-                textDecorationColor: '#525252',
-                textDecorationThickness: 4,
+                textUnderlineOffset: 8,
+                textDecorationColor: mode("#3d7aed", "#ff63c3")(props),
+                textDecorationThickness: 2,
                 marginTop: 3,
-                marginBottom: 4
-            }
+                marginBottom: 4,
+            }),
         }
     },
     Link: {
