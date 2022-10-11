@@ -53,7 +53,7 @@ const NavBar = (props: {
             w="100%"
             bg={useColorModeValue('#ffffff40', '#20202380')}
             css={{ backdropFilter: 'blur(10px)' }}
-            zIndex=""
+            zIndex="sticky"
             {...props}
             insetX={0}
             transitionDuration="normal"

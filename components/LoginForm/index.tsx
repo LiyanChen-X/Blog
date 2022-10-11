@@ -28,7 +28,7 @@ const LoginForm = ({
             <ModalContent>
                 <ModalCloseButton rounded="full" />
                 <ModalBody>
-                    <Container width={"full"} pt="4">
+                    <Container width={"full"} pt="4" px="2">
                         <Flex
                             width="full"
                             justifyContent="center"
@@ -40,8 +40,26 @@ const LoginForm = ({
                                 </Box>
                             </AspectRatio>
                         </Flex>
-
-                        <Stack spacing={2} pb={2}>
+                        <HStack py="2" justifyContent={"center"} gap="4">
+                            <IconButton
+                                size="sm"
+                                rounded="full"
+                                variant="outline"
+                                colorScheme={"gray"}
+                                aria-label={"Github"}
+                                icon={<FaGithub />}
+                            >
+                            </IconButton>
+                            <IconButton
+                                size="sm"
+                                rounded="full"
+                                variant="outline"
+                                aria-label={"Github"}
+                                icon={<FcGoogle/>}
+                            >   
+                            </IconButton>
+                        </HStack>
+                        <Stack spacing={2} pb={4}>
                             <FormControl>
                                 <FormLabel fontSize="xs">Email </FormLabel>
                                 <InputGroup variant="flushed" size="sm">
@@ -71,29 +89,11 @@ const LoginForm = ({
                                 Sign in
                             </Button>
                         </Stack>
-                        <HStack py="6" justifyContent={"end"}>
-                            <IconButton
-                                size="sm"
-                                rounded="full"
-                                variant="outline"
-                                colorScheme={"gray"}
-                                aria-label={"Github"}
-                                icon={<FaGithub />}
-                            >
-                            </IconButton>
-                            <IconButton
-                                size="sm"
-                                rounded="full"
-                                variant="outline"
-                                aria-label={"Github"}
-                                icon={<FcGoogle/>}
-                            >
-                                
-                            </IconButton>
-                        </HStack>
-                        <Divider />
-                        <Flex justifyContent={"flex-end"} py="4">
-                            <Button fontSize="xs">Sign up</Button>
+
+                        <Flex justifyContent={"flex-end"} py="2">
+                            <Text fontSize="xs">
+                                No account yet? <Link >Sign up</Link>
+                            </Text>
                         </Flex>
                     </Container>
                 </ModalBody>
