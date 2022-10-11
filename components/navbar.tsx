@@ -8,12 +8,19 @@ import {
     Flex,
     IconButton,
     useColorModeValue,
-    Tooltip
+    Tooltip,
+    Modal,
+    useDisclosure,
+    ModalOverlay,
+    ModalCloseButton,
+    ModalContent,
+    ModalBody,
+    ModalFooter
 } from "@chakra-ui/react";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { CmdPaletteContext } from "../providers/cmd-palette-provider";
-import { FiCommand } from 'react-icons/fi';
-
+import { FiCommand, FiLogIn } from 'react-icons/fi';
+import LoginForm from "./LoginForm";
 
 export interface ILinkItemProps {
     href: string,
@@ -31,7 +38,7 @@ const NavBar = (props: {
     const { path } = props;
     const { open: openCommandPalette } = useContext(CmdPaletteContext);
     const [shortcut, setShortcut] = useState<string>();
-
+    const {isOpen, onOpen, onClose} = useDisclosure();
     useEffect(() => {
         setShortcut(
             navigator.userAgent.indexOf('Mac OS X') != -1 ? 'Cmd + P' : 'Ctrl + P'
@@ -46,7 +53,7 @@ const NavBar = (props: {
             w="100%"
             bg={useColorModeValue('#ffffff40', '#20202380')}
             css={{ backdropFilter: 'blur(10px)' }}
-            zIndex="popover"
+            zIndex=""
             {...props}
             insetX={0}
             transitionDuration="normal"
@@ -84,6 +91,27 @@ const NavBar = (props: {
                             variant="ghost"
                         />
                     </Tooltip>
+
+                    <Tooltip label={`Login`} modifiers={[
+                        {
+                            name: "preventOverflow",
+                            options: {
+                                padding: 8
+                            }
+                        }
+                    ]}>
+                        <IconButton
+                            aria-label="Login"
+                            icon={<FiLogIn />
+                            }
+                            size="sm"
+                            onClick={onOpen}
+                            variant="ghost">
+
+                        </IconButton>
+                    </Tooltip>
+                    <LoginForm isOpen={isOpen} onClose={onClose} />
+                    
                 </Flex>
 
                 {/* <Stack
