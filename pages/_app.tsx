@@ -8,6 +8,7 @@ import { ChakraProvider, useColorMode, useTheme } from "@chakra-ui/react";
 import theme from "../lib/theme";
 import CmdPaletteProvider from "../providers/cmd-palette-provider";
 import CmdPalette from "../components/cmd-palette-provider";
+import { SessionProvider } from "next-auth/react";
 
 if (typeof window !== "undefined") {
   window.history.scrollRestoration = "manual";
@@ -16,21 +17,23 @@ if (typeof window !== "undefined") {
 
 function Website({ Component, pageProps, router }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <Fonts />
-      <CmdPaletteProvider>
-        <AnimatePresence initial={true} onExitComplete={() => {
-          if (typeof window !== "undefined") {
-            window.scrollTo({ top: 0 })
-          }
-        }}>
-          <Layout router={router} key={router.route}>
-            <Component {...pageProps} />
-          </Layout>
-          <CmdPalette />
-        </AnimatePresence>
-      </CmdPaletteProvider>
-    </ChakraProvider >
+    <SessionProvider session={pageProps.session}>
+      <ChakraProvider theme={theme}>
+        <Fonts />
+        <CmdPaletteProvider>
+          <AnimatePresence initial={true} onExitComplete={() => {
+            if (typeof window !== "undefined") {
+              window.scrollTo({ top: 0 })
+            }
+          }}>
+            <Layout router={router} key={router.route}>
+              <Component {...pageProps} />
+            </Layout>
+            <CmdPalette />
+          </AnimatePresence>
+        </CmdPaletteProvider>
+      </ChakraProvider >
+    </SessionProvider>
   )
 }
 
