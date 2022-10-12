@@ -36,7 +36,7 @@ const LoginForm = ({
                         >
                             <AspectRatio as="figure" flexShrink={0} w={28} h={28} ratio={1}>
                                 <Box overflow="hidden" rounded="full">
-                                    <Image layout="fill" alt="my profile" src="/images/profile.png" />
+                                    <Image layout="fill" alt="my profile" src="/images/avatar.png" />
                                 </Box>
                             </AspectRatio>
                         </Flex>

@@ -7,8 +7,8 @@ import { getEnv } from "../../../lib/get-config-value"
 
 const GithubID = getEnv("GITHUB_ID");
 const GithubSecret = getEnv("GITHUB_SECRET");
-const GoogleID = getEnv("GOOGLE_ID");
-const GoogleSecret = getEnv("GOOGLE_SECRET");
+// const GoogleID = getEnv("GOOGLE_ID");
+// const GoogleSecret = getEnv("GOOGLE_SECRET");
 
 
 export const authOptions: NextAuthOptions = {
@@ -17,10 +17,10 @@ export const authOptions: NextAuthOptions = {
             clientId: GithubID,
             clientSecret: GithubSecret,
         }), 
-        GoogleProvider({
-            clientId: GoogleID, 
-            clientSecret: GoogleSecret
-        })
+        // GoogleProvider({
+        //     clientId: GoogleID, 
+        //     clientSecret: GoogleSecret
+        // })
     ], 
     callbacks: {
         async jwt({token}) {
