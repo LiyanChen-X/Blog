@@ -18,7 +18,7 @@ import { FiCommand, FiLogIn } from 'react-icons/fi';
 import LoginForm from "../LoginForm";
 import { useSession } from "next-auth/react";
 import CommandButton from "./CommandButton";
-import LoginButton from "./loginButton";
+import LoginButton from "./LoginButton";
 
 export interface ILinkItemProps {
     href: string,
