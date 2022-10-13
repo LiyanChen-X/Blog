@@ -4,6 +4,8 @@ import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import { CgMail, CgPassword, CgVoicemail } from "react-icons/cg";
 import { FaGithub } from "react-icons/fa";
+import { signIn} from "next-auth/react";
+import {useRouter} from "next/router";
 
 interface Props {
     isOpen: boolean;
@@ -16,7 +18,7 @@ const LoginForm = ({
 }: Props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const router = useRouter();
     return (
         <Modal
             size={"xs"}
@@ -42,6 +44,9 @@ const LoginForm = ({
                         </Flex>
                         <HStack py="2" justifyContent={"center"} gap="4">
                             <IconButton
+                                onClick={() => {
+                                    signIn("github", { callbackUrl: router.asPath });
+                                }}
                                 size="sm"
                                 rounded="full"
                                 variant="outline"
