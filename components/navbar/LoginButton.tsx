@@ -1,7 +1,7 @@
 import { 
     Tooltip, IconButton, useDisclosure, 
     AspectRatio, Box, MenuButton, forwardRef, 
-Menu, MenuList, MenuItem } from "@chakra-ui/react";
+Menu, MenuList, MenuItem, MenuDivider } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { FiLogIn } from "react-icons/fi";
 import LoginForm from "../LoginForm";
@@ -20,7 +20,9 @@ const LoginButton = () => {
                     as={UserMenuButton}
                     image={user.image}
                 />
-                <MenuList>
+                <MenuList fontSize="sm">
+                    <MenuItem>Signed in as {user.name}</MenuItem>
+                    <MenuDivider/>
                     <MenuItem onClick={() => signOut()}>
                         Sign out
                     </MenuItem>

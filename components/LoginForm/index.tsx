@@ -2,7 +2,7 @@ import { AspectRatio, Box, Button, Container, Divider, Flex, Text, FormControl, 
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
-import { CgMail, CgPassword, CgVoicemail } from "react-icons/cg";
+import { CgMail, CgPassword } from "react-icons/cg";
 import { FaGithub } from "react-icons/fa";
 import { signIn} from "next-auth/react";
 import {useRouter} from "next/router";
@@ -42,28 +42,7 @@ const LoginForm = ({
                                 </Box>
                             </AspectRatio>
                         </Flex>
-                        <HStack py="2" justifyContent={"center"} gap="4">
-                            <IconButton
-                                onClick={() => {
-                                    signIn("github", { callbackUrl: router.asPath });
-                                }}
-                                size="sm"
-                                rounded="full"
-                                variant="outline"
-                                colorScheme={"gray"}
-                                aria-label={"Github"}
-                                icon={<FaGithub />}
-                            >
-                            </IconButton>
-                            <IconButton
-                                size="sm"
-                                rounded="full"
-                                variant="outline"
-                                aria-label={"Github"}
-                                icon={<FcGoogle/>}
-                            >   
-                            </IconButton>
-                        </HStack>
+
                         <Stack spacing={2} pb={4}>
                             <FormControl>
                                 <FormLabel fontSize="xs">Email </FormLabel>
@@ -92,6 +71,18 @@ const LoginForm = ({
                                 variant="outline"
                             >
                                 Sign in
+                            </Button>
+                            <Button
+                                size="sm"
+                                rounded="xl"
+                                onClick={() => {
+                                    signIn("github", { callbackUrl: router.asPath });
+                                }}
+                                colorScheme={"cyan"}
+                                variant="outline"
+                                leftIcon={<FaGithub />}
+                            >
+                                Sign in With Github
                             </Button>
                         </Stack>
 
